@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/common/constans/image.dart';
+import 'package:flutter_fic9_ecommerce_fahron_app/data/datasources/auth_local_datasource.dart';
 
 import '../../common/components/button.dart';
 import '../../common/components/custom_text_field.dart';
@@ -82,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               state.maybeWhen(
                   orElse: () {},
                   success: (data) {
+                    AuthLocalDataSource().saveAuthData(data);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -107,12 +109,6 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context, state) {
               return Button.filled(
                 onPressed: () {
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const DashboardPage(),
-                  //   ),
-                  // );
                   final data = LoginRequestModel(
                       identifier: emailController.text,
                       password: passwordController.text);

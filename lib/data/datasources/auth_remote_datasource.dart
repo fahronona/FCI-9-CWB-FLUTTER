@@ -14,6 +14,7 @@ class AuthRemoteDatasource {
       body: data.toJson(),
       headers: headers,
     );
+
     if (response.statusCode == 200) {
       return right(AuthResponseModel.fromJson(response.body));
     } else {
