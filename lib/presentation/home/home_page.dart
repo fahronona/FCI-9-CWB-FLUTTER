@@ -5,11 +5,15 @@ import 'package:flutter_fic9_ecommerce_fahron_app/common/components/search_input
 import 'package:flutter_fic9_ecommerce_fahron_app/common/components/space_height.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/common/constans/colors.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/common/constans/image.dart';
+import 'package:flutter_fic9_ecommerce_fahron_app/presentation/cart/bloc/cart/cart_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/home/bloc/product/product_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/home/widget/category_button.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/home/widget/image_slider.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/home/widget/product_card.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/home/widget/product_model.dart';
+
+import '../cart/cart_page.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -103,26 +107,44 @@ class _HomePageState extends State<HomePage> {
               const Spacer(),
               Row(
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SizedBox()),
+                  badges.Badge(
+                    badgeContent: BlocBuilder<CartBloc, CartState>(
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                          orElse: () {
+                            return const Text(
+                              "0",
+                              style: TextStyle(color: Colors.white),
+                            );
+                          },
+                          loaded: (carts) {
+                            int totalQt = 0;
+                            for (var qty in carts) {
+                              totalQt += qty.quantity;
+                            }
+                            return Text(
+                              totalQt.toString(),
+                              style: TextStyle(color: Colors.white),
+                            );
+                          },
                         );
                       },
-                      icon: Image.asset(
-                        Images.iconBuy,
-                        height: 24.0,
-                      )),
+                    ),
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CartPage()),
+                          );
+                        },
+                        icon: Image.asset(
+                          Images.iconBuy,
+                          height: 24.0,
+                        )),
+                  ),
                   IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SizedBox()),
-                        );
-                      },
+                      onPressed: () {},
                       icon: Image.asset(
                         Images.iconNotificationHome,
                         height: 24.0,

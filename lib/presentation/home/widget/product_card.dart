@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/common/constans/colors.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/common/constans/variable.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/common/extensions/int_ext.dart';
 import '../../../common/components/space_height.dart';
 import '../../../data/models/responses/products_response_model.dart';
+import '../../cart/bloc/cart/cart_bloc.dart';
+import '../../cart/widgets/cart_model.dart';
+import '../../product_detail/product_detail_page.dart';
 
 class ProductCard extends StatelessWidget {
   final Product data;
@@ -13,10 +17,13 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const ProductDetailPage()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProductDetailPage(
+                    product: data,
+                  )),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -49,13 +56,24 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SpaceHeight(4.0),
-            Text(
-              int.parse(data.attributes.price).currencyFormatRp,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+            const SpaceHeight(0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  int.parse(data.attributes.price).currencyFormatRp,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      context.read<CartBloc>().add(
+                          CartEvent.add(CartModel(product: data, quantity: 1)));
+                    },
+                    icon: const Icon(Icons.add))
+              ],
             ),
           ],
         ),

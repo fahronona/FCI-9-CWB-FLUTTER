@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/auth/bloc/register/register_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/auth/splash_page.dart';
+import 'package:flutter_fic9_ecommerce_fahron_app/presentation/cart/bloc/cart/cart_bloc.dart';
 import 'package:flutter_fic9_ecommerce_fahron_app/presentation/home/bloc/product/product_bloc.dart';
 
 void main() {
@@ -21,9 +22,15 @@ class MainApp extends StatelessWidget {
         BlocProvider<ProductBloc>(
             create: (context) =>
                 ProductBloc()..add(const ProductEvent.getAll())),
+        BlocProvider<CartBloc>(create: (context) => CartBloc()),
       ],
-      child: const MaterialApp(
-          debugShowCheckedModeBanner: false, home: SplashPage()),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: SplashPage()),
     );
   }
 }
